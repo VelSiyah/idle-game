@@ -4,28 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Idle Game</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Idle Game</h1>
-    <div id="stats">
-        <p id="health">Health: </p>
-        <p id="maxHealth">Max Health: </p>
-        <p id="stamina">Stamina: </p>
-        <p id="maxStamina">Max Stamina: </p>
-        <p id="ki">Ki: </p>
-        <p id="maxKi">Max Ki: </p>
-        <p id="distance">Distance: </p>
-        <p id="vigor">Vigor: </p>
-        <progress id="vigorBar" max="75" value="0"></progress>
-        <p id="dexterity">Dexterity: </p>
-        <progress id="dexterityBar" max="100" value="0"></progress>
-        <p id="willpower">Willpower: </p>
-        <progress id="willpowerBar" max="100" value="0"></progress>
-    </div>
-    <div id="actions">
-        <button id="restBtn">Rest</button>
-        <button id="crawlBtn">Crawl</button>
-        <button id="situpBtn">Situp</button>
+    <div class="container">
+        <h1>Idle Game</h1>
+        <div id="stats">
+            <div id="health">Health: </div>
+            <div id="stamina">Stamina: </div>
+            <div id="ki">Ki: </div>
+            <div id="distance">Distance: </div>
+            <div id="vigor">Vigor: </div>
+            <progress id="vigorBar" max="75"></progress>
+            <div id="dexterity">Dexterity: </div>
+            <progress id="dexterityBar" max="100"></progress>
+            <div id="willpower">Willpower: </div>
+            <progress id="willpowerBar" max="100"></progress>
+        </div>
+        <div id="actions">
+            <button id="restBtn">Rest</button>
+            <button id="crawlBtn">Crawl</button>
+            <button id="situpBtn">Sit-Up</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
