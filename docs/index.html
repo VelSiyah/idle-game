@@ -6,6 +6,27 @@
     <title>Idle Game</title>
 </head>
 <body>
+    <h1>Idle Game</h1>
+    <div id="stats">
+        <p id="health">Health: </p>
+        <p id="maxHealth">Max Health: </p>
+        <p id="stamina">Stamina: </p>
+        <p id="maxStamina">Max Stamina: </p>
+        <p id="ki">Ki: </p>
+        <p id="maxKi">Max Ki: </p>
+        <p id="distance">Distance: </p>
+        <p id="vigor">Vigor: </p>
+        <progress id="vigorBar" max="75" value="0"></progress>
+        <p id="dexterity">Dexterity: </p>
+        <progress id="dexterityBar" max="100" value="0"></progress>
+        <p id="willpower">Willpower: </p>
+        <progress id="willpowerBar" max="100" value="0"></progress>
+    </div>
+    <div id="actions">
+        <button id="restBtn">Rest</button>
+        <button id="crawlBtn">Crawl</button>
+        <button id="situpBtn">Situp</button>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
