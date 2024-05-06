@@ -6,46 +6,33 @@
     <title>Idle Game</title>
 </head>
 <body>
-    <script type="module">
-        // Python code converted to JavaScript using Transcrypt
-        var __name__ = '__main__';
-        var __pragma__ = function () {};
-        var tk = { Label: function () {}, Button: function () {}, Tk: function () {} };
-        var GameUI = __class__ ('GameUI', [object], {
-            __init__: function (self, player) {
-                self.player = player;
-                self.root = new tk.Tk ();
-                self.resource_labels = {};
-                var $iter = enumerate (self.player.resources);
-                for (var $i = 0; $i < len ($iter); $i++) {
-                    var index = $iter [$i][0];
-                    var resource_name = $iter [$i][1];
-                    var resource = self.player.resources [index];
-                    var label = new tk.Label (self.root, {text: (resource_name + ': ' + resource.amount)});
-                    label.pack ();
-                    self.resource_labels [resource_name] = label;
-                }
-                var produce_button = new tk.Button (self.root, {text: 'Produce', command: self.produce});
-                produce_button.pack ();
-            },
-            produce: function (self) {
-                self.player.produce ();
-                var $iter = enumerate (self.player.resources);
-                for (var $i = 0; $i < len ($iter); $i++) {
-                    var index = $iter [$i][0];
-                    var resource_name = $iter [$i][1];
-                    var resource = self.player.resources [index];
-                    self.resource_labels [resource_name].config ({text: (resource_name + ': ' + resource.amount)});
-                }
-                self.root.after (1000, self.produce);
-            }
+    <div id="resources"></div>
+    <button id="produceBtn">Produce</button>
+
+    <script src="script.js"></script>
+    <script>
+        // UI code
+        const resourcesDiv = document.getElementById("resources");
+        const produceBtn = document.getElementById("produceBtn");
+
+        // Function to update resource display
+        function updateResources() {
+            resourcesDiv.innerHTML = "";
+            Object.values(player.resources).forEach(resource => {
+                const resourceDiv = document.createElement("div");
+                resourceDiv.innerText = `${resource.name}: ${resource.amount}`;
+                resourcesDiv.appendChild(resourceDiv);
+            });
+        }
+
+        // Event listener for the produce button
+        produceBtn.addEventListener("click", () => {
+            player.produce();
+            updateResources();
         });
-        var player = new Player ();
-        player.add_resource (new Resource ('Wood'));
-        player.add_resource (new Resource ('Stone'));
-        player.add_loop (new Loop ('Woodcutter', new Resource ('Wood'), [new Resource ('Stone', 5)]));
-        var ui = new GameUI (player);
-        ui.root.mainloop ();
+
+        // Update resources display initially
+        updateResources();
     </script>
 </body>
 </html>
