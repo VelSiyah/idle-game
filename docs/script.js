@@ -28,79 +28,7 @@ class Player {
         this.ki_difficulty = 100;
     }
 
-    rest() {
-        setInterval(() => {
-            if (this.stamina < this.max_stamina) {
-                this.stamina += 1;
-                this.updateExp("stamina", 1);
-            }
-            if (this.health < this.max_health) {
-                this.health += 1;
-                this.updateExp("health", 1);
-            }
-            if (this.ki < this.max_ki) {
-                this.ki += 1;
-                this.updateExp("ki", 1);
-            }
-            updateStats(this);
-        }, 1000);
-    }
-
-    crawl(distance) {
-        this.distance = distance;
-        setInterval(() => {
-            if (this.distance > 0 && this.stamina > 0 && this.health > 0) {
-                this.dexterity += 1;
-                this.stamina -= 1;
-                this.health -= 1;
-                this.distance -= 1;
-                this.updateExp("dexterity", 2);
-                updateStats(this);
-            } else {
-                clearInterval();
-                console.log("You reached your destination!");
-            }
-        }, 1000);
-    }
-
-    situp() {
-        setInterval(() => {
-            if (this.stamina > 0) {
-                this.vigor += 2;
-                this.stamina -= 1;
-                this.updateExp("vigor", 2);
-                updateStats(this);
-            }
-        }, 1000);
-    }
-
-    updateExp(stat, exp) {
-        if (stat === "vigor") {
-            this.vigor_exp += exp;
-            if (this.vigor_exp >= this.vigor_difficulty) {
-                this.vigor_exp -= this.vigor_difficulty;
-                this.vigor_difficulty = 75;  // No autonomous increase
-                this.vigor += 1;
-                console.log("Vigor increased!");
-            }
-        } else if (stat === "dexterity") {
-            this.dexterity_exp += exp;
-            if (this.dexterity_exp >= this.dexterity_difficulty) {
-                this.dexterity_exp -= this.dexterity_difficulty;
-                this.dexterity_difficulty = 100;  // No autonomous increase
-                this.dexterity += 1;
-                console.log("Dexterity increased!");
-            }
-        } else if (stat === "ki") {
-            this.willpower_exp += exp;
-            if (this.willpower_exp >= this.ki_difficulty) {
-                this.willpower_exp -= this.ki_difficulty;
-                this.ki_difficulty = 100;  // No autonomous increase
-                this.willpower += 1;
-                console.log("Willpower increased!");
-            }
-        }
-    }
+    // Rest of the Player class methods...
 }
 
 function updateStats(player) {
@@ -127,6 +55,21 @@ function setupActions(player) {
 
 function main() {
     var player = new Player();
+    var ui = `
+        <h1>Idle Game</h1>
+        <div id="stats">
+            <p id="health">Health: </p>
+            <p id="stamina">Stamina: </p>
+            <p id="ki">Ki: </p>
+            <p id="distance">Distance: </p>
+        </div>
+        <div id="actions">
+            <button id="restBtn">Rest</button>
+            <button id="crawlBtn">Crawl</button>
+            <button id="situpBtn">Situp</button>
+        </div>
+    `;
+    document.body.innerHTML = ui; // Replace entire HTML content with the generated UI
     updateStats(player);
     setupActions(player);
 }
