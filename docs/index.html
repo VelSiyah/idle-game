@@ -1,31 +1,51 @@
-import tkinter as tk
-
-class GameUI:
-    def __init__(self, player):
-        self.player = player
-        self.root = tk.Tk()
-        self.resource_labels = {}
-
-        for resource_name, resource in self.player.resources.items():
-            label = tk.Label(self.root, text=f"{resource_name}: {resource.amount}")
-            label.pack()
-            self.resource_labels[resource_name] = label
-
-        produce_button = tk.Button(self.root, text="Produce", command=self.produce)
-        produce_button.pack()
-
-    def produce(self):
-        self.player.produce()
-        for resource_name, resource in self.player.resources.items():
-            self.resource_labels[resource_name].config(text=f"{resource_name}: {resource.amount}")
-
-        self.root.after(1000, self.produce)
-
-# Example usage:
-player = Player()
-player.add_resource(Resource("Wood"))
-player.add_resource(Resource("Stone"))
-player.add_loop(Loop("Woodcutter", Resource("Wood"), [Resource("Stone", 5)]))
-
-ui = GameUI(player)
-ui.root.mainloop()
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idle Game</title>
+</head>
+<body>
+    <script type="module">
+        // Python code converted to JavaScript using Transcrypt
+        var __name__ = '__main__';
+        var __pragma__ = function () {};
+        var tk = { Label: function () {}, Button: function () {}, Tk: function () {} };
+        var GameUI = __class__ ('GameUI', [object], {
+            __init__: function (self, player) {
+                self.player = player;
+                self.root = new tk.Tk ();
+                self.resource_labels = {};
+                var $iter = enumerate (self.player.resources);
+                for (var $i = 0; $i < len ($iter); $i++) {
+                    var index = $iter [$i][0];
+                    var resource_name = $iter [$i][1];
+                    var resource = self.player.resources [index];
+                    var label = new tk.Label (self.root, {text: (resource_name + ': ' + resource.amount)});
+                    label.pack ();
+                    self.resource_labels [resource_name] = label;
+                }
+                var produce_button = new tk.Button (self.root, {text: 'Produce', command: self.produce});
+                produce_button.pack ();
+            },
+            produce: function (self) {
+                self.player.produce ();
+                var $iter = enumerate (self.player.resources);
+                for (var $i = 0; $i < len ($iter); $i++) {
+                    var index = $iter [$i][0];
+                    var resource_name = $iter [$i][1];
+                    var resource = self.player.resources [index];
+                    self.resource_labels [resource_name].config ({text: (resource_name + ': ' + resource.amount)});
+                }
+                self.root.after (1000, self.produce);
+            }
+        });
+        var player = new Player ();
+        player.add_resource (new Resource ('Wood'));
+        player.add_resource (new Resource ('Stone'));
+        player.add_loop (new Loop ('Woodcutter', new Resource ('Wood'), [new Resource ('Stone', 5)]));
+        var ui = new GameUI (player);
+        ui.root.mainloop ();
+    </script>
+</body>
+</html>
