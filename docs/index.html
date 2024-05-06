@@ -1,103 +1,86 @@
-import tkinter as tk
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game UI</title>
+    <style>
+        /* Define styles for the UI elements */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
 
-class GameUI:
-    def __init__(self, master):
-        self.master = master
-        master.title("Game UI")
+        .bar {
+            width: 200px;
+            height: 20px;
+            border: 1px solid black;
+            margin-bottom: 5px;
+        }
 
-        # Top Left: Health, Stamina, Ki Bars
-        self.health_label = tk.Label(master, text="Health:")
-        self.health_label.grid(row=0, column=0)
-        self.health_bar = tk.Label(master, bg="red", width=20)
-        self.health_bar.grid(row=0, column=1)
+        .button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Top left: Health, Stamina, Ki Bars -->
+        <div>
+            <span>Health:</span>
+            <div class="bar" id="healthBar"></div>
+            <span>Stamina:</span>
+            <div class="bar" id="staminaBar"></div>
+            <span>Ki:</span>
+            <div class="bar" id="kiBar"></div>
+        </div>
 
-        self.stamina_label = tk.Label(master, text="Stamina:")
-        self.stamina_label.grid(row=1, column=0)
-        self.stamina_bar = tk.Label(master, bg="yellow", width=20)
-        self.stamina_bar.grid(row=1, column=1)
+        <!-- Top middle: Area, Action -->
+        <div>
+            <span id="areaLabel">Area: Foggy Beach</span><br>
+            <span id="actionLabel">Action: Nothing</span>
+        </div>
 
-        self.ki_label = tk.Label(master, text="Ki:")
-        self.ki_label.grid(row=2, column=0)
-        self.ki_bar = tk.Label(master, bg="blue", width=20)
-        self.ki_bar.grid(row=2, column=1)
+        <!-- Top right: Vigor, Dexterity, Willpower Bars -->
+        <div>
+            <span>Vigor: <span id="vigorVar">0</span></span><br>
+            <div class="bar" style="background-color: red;" id="vigorExpBar"></div>
+            <span>Dexterity: <span id="dexterityVar">0</span></span><br>
+            <div class="bar" style="background-color: yellow;" id="dexterityExpBar"></div>
+            <span>Willpower: <span id="willpowerVar">0</span></span><br>
+            <div class="bar" style="background-color: blue;" id="willpowerExpBar"></div>
+        </div>
 
-        # Top Middle: Area, Action
-        self.area_label = tk.Label(master, text="Area: Foggy Beach")
-        self.area_label.grid(row=0, column=2, columnspan=2)
+        <!-- Bottom left: Action Buttons -->
+        <button class="button" onclick="restAction()">Rest</button>
+    </div>
 
-        self.action_label = tk.Label(master, text="Action: Nothing")
-        self.action_label.grid(row=1, column=2, columnspan=2)
+    <script>
+        // Function to update UI elements
+        function updateBars() {
+            document.getElementById('healthBar').innerText = "80/100";
+            document.getElementById('staminaBar').innerText = "50/100";
+            document.getElementById('kiBar').innerText = "30/100";
 
-        # Top Right: Vigor, Dexterity, Willpower Bars
-        self.vigor_label = tk.Label(master, text="Vigor:")
-        self.vigor_label.grid(row=0, column=4)
-        self.vigor_var_label = tk.Label(master, text="0")
-        self.vigor_var_label.grid(row=0, column=5)
-        self.vigor_exp_label = tk.Label(master, text="Vigor Exp:")
-        self.vigor_exp_label.grid(row=1, column=4)
-        self.vigor_exp_bar = tk.Label(master, bg="red", width=20)
-        self.vigor_exp_bar.grid(row=1, column=5)
+            document.getElementById('vigorVar').innerText = "5";
+            document.getElementById('vigorExpBar').style.width = "50%";
+            document.getElementById('dexterityVar').innerText = "3";
+            document.getElementById('dexterityExpBar').style.width = "20%";
+            document.getElementById('willpowerVar').innerText = "7";
+            document.getElementById('willpowerExpBar').style.width = "80%";
+        }
 
-        self.dexterity_label = tk.Label(master, text="Dexterity:")
-        self.dexterity_label.grid(row=2, column=4)
-        self.dexterity_var_label = tk.Label(master, text="0")
-        self.dexterity_var_label.grid(row=2, column=5)
-        self.dexterity_exp_label = tk.Label(master, text="Dexterity Exp:")
-        self.dexterity_exp_label.grid(row=3, column=4)
-        self.dexterity_exp_bar = tk.Label(master, bg="yellow", width=20)
-        self.dexterity_exp_bar.grid(row=3, column=5)
+        // Function to handle rest action
+        function restAction() {
+            console.log("Rest action triggered.");  // Placeholder action
+        }
 
-        self.willpower_label = tk.Label(master, text="Willpower:")
-        self.willpower_label.grid(row=4, column=4)
-        self.willpower_var_label = tk.Label(master, text="0")
-        self.willpower_var_label.grid(row=4, column=5)
-        self.willpower_exp_label = tk.Label(master, text="Willpower Exp:")
-        self.willpower_exp_label.grid(row=5, column=4)
-        self.willpower_exp_bar = tk.Label(master, bg="blue", width=20)
-        self.willpower_exp_bar.grid(row=5, column=5)
-
-        # Bottom Left: Action Buttons
-        self.action_button = tk.Button(master, text="Rest", command=self.rest_action)
-        self.action_button.grid(row=6, column=0)
-
-    def update_health_bar(self, current_health, max_health):
-        self.health_bar.config(text=f"{current_health}/{max_health}")
-
-    def update_stamina_bar(self, current_stamina, max_stamina):
-        self.stamina_bar.config(text=f"{current_stamina}/{max_stamina}")
-
-    def update_ki_bar(self, current_ki, max_ki):
-        self.ki_bar.config(text=f"{current_ki}/{max_ki}")
-
-    def update_vigor(self, current_vigor, vigor_exp):
-        self.vigor_var_label.config(text=current_vigor)
-        self.vigor_exp_bar.config(width=vigor_exp)
-
-    def update_dexterity(self, current_dexterity, dexterity_exp):
-        self.dexterity_var_label.config(text=current_dexterity)
-        self.dexterity_exp_bar.config(width=dexterity_exp)
-
-    def update_willpower(self, current_willpower, willpower_exp):
-        self.willpower_var_label.config(text=current_willpower)
-        self.willpower_exp_bar.config(width=willpower_exp)
-
-    def update_area(self, area):
-        self.area_label.config(text=f"Area: {area}")
-
-    def update_action(self, action_state):
-        self.action_label.config(text=f"Action: {action_state}")
-
-    def rest_action(self):
-        print("Rest action triggered.")  # Placeholder action
-
-
-root = tk.Tk()
-ui = GameUI(root)
-# Simulating data updates
-ui.update_health_bar(80, 100)
-ui.update_stamina_bar(50, 100)
-ui.update_ki_bar(30, 100)
-ui.update_vigor(5, 50)
-ui.update_dexterity(3, 20)
-ui.update_willpower(7, 80)
-root.mainloop()
+        // Call the updateBars function when the page loads
+        window.onload = updateBars;
+    </script>
+</body>
+</html>
