@@ -1,7 +1,4 @@
 // Define the Player class...
-// Paste the JavaScript code for the game here
-
-// JavaScript code for the game
 class Player {
     constructor() {
         // Base resources
@@ -94,20 +91,88 @@ class Player {
 
     update_exp(stat, exp) {
         // Update experience and stats based on the action
-        // Same as before
+        if (stat === "stamina" && exp < 0) {
+            this.vigor_exp += 1; // Spending stamina increases vigor
+            this.dexterity_exp += 2; // Spending stamina increases dexterity
+            this.willpower_exp += 1; // Spending stamina increases willpower
+        }
+        if (stat === "stamina" && exp > 0) {
+            this.vigor_exp += 1; // Recovering stamina increases vigor
+            this.dexterity_exp += 2; // Recovering stamina increases dexterity
+            this.willpower_exp += 1; // Recovering stamina increases willpower
+        }
+        if (stat === "health" && exp < 0) {
+            this.vigor_exp += 3; // Spending health increases vigor
+            this.willpower_exp += 1; // Spending health increases willpower
+        }
+        if (stat === "health" && exp > 0) {
+            this.vigor_exp += 2; // Recovering health increases vigor
+            this.willpower_exp += 1; // Recovering health increases willpower
+        }
+        if (stat === "ki" && exp < 0) {
+            this.vigor_exp += 1; // Spending ki increases vigor
+            this.willpower_exp += 3; // Spending ki increases willpower
+        }
+        if (stat === "ki" && exp > 0) {
+            this.vigor_exp += 1; // Recovering ki increases vigor
+            this.willpower_exp += 2; // Recovering ki increases willpower
+        }
+        // Check for level up
+        if (this.vigor_exp >= this.vigor_difficulty) {
+            this.vigor_exp -= this.vigor_difficulty;
+            this.vigor_difficulty = 75; // Reset the difficulty
+            this.vigor += 1; // Increase vigor
+        }
+        if (this.dexterity_exp >= this.dexterity_difficulty) {
+            this.dexterity_exp -= this.dexterity_difficulty;
+            this.dexterity_difficulty = 100; // Reset the difficulty
+            this.dexterity += 1; // Increase dexterity
+        }
+        if (this.willpower_exp >= this.ki_difficulty) {
+            this.willpower_exp -= this.ki_difficulty;
+            this.ki_difficulty = 100; // Reset the difficulty
+            this.willpower += 1; // Increase willpower
+        }
     }
 }
 
 function updateStats(player) {
-    // Same as before
+    // Update the UI with player stats
+    document.getElementById("health").innerText = "Health: " + player.health + "/" + player.max_health;
+    document.getElementById("stamina").innerText = "Stamina: " + player.stamina + "/" + player.max_stamina;
+    document.getElementById("ki").innerText = "Ki: " + player.ki + "/" + player.max_ki;
+    document.getElementById("distance").innerText = "Distance: " + player.distance;
+    document.getElementById("vigor").innerText = "Vigor: " + player.vigor;
+    document.getElementById("vigorBar").value = player.vigor_exp;
+    document.getElementById("dexterity").innerText = "Dexterity: " + player.dexterity;
+    document.getElementById("dexterityBar").value = player.dexterity_exp;
+    document.getElementById("willpower").innerText = "Willpower: " + player.willpower;
+    document.getElementById("willpowerBar").value = player.willpower_exp;
 }
 
 function setupActions(player) {
-    // Same as before
+    // Set up event listeners for action buttons
+    document.getElementById("restBtn").addEventListener("click", function() {
+        player.rest();
+    });
+
+    document.getElementById("crawlBtn").addEventListener("click", function() {
+        // Prompt the user to enter distance
+        var distance = parseInt(prompt("Enter distance to crawl:"));
+        player.targetDistance = distance; // Store target distance in player object
+        player.crawl(); // Execute crawl action
+    });
+
+    document.getElementById("situpBtn").addEventListener("click", function() {
+        player.situp(); // Execute sit-up action
+    });
 }
 
 function main() {
-    // Same as before
+    // Initialize player and set up actions
+    var player = new Player();
+    updateStats(player);
+    setupActions(player);
 }
 
 main();
