@@ -1,86 +1,103 @@
-import time
+import tkinter as tk
 
-class Player:
-    def __init__(self):
-        # Base parameters
-        self.current_race = "Human"
-        self.base_vigor = 0
-        self.vigor_modifiers = 0
-        self.vigor_experience = 0
-        self.base_dexterity = 0
-        self.dexterity_modifiers = 0
-        self.dexterity_experience = 0
-        self.base_willpower = 0
-        self.willpower_modifiers = 0
-        self.willpower_experience = 0
-        self.current_health = 1
-        self.current_stamina = 0
-        self.current_ki = 0
-        self.distance_traveled = 0
-        self.current_area = "Foggy Beach"
-        self.recovery_actions = 1
-        self.traveling_actions = 0
-        self.exercise_actions = 0
-        self.physical_combat_actions = 0
-        self.energy_combat_actions = 0
-        self.magical_actions = 0
+class GameUI:
+    def __init__(self, master):
+        self.master = master
+        master.title("Game UI")
 
-        # Calculate maximum parameters
-        self.max_health = 100 + self.base_vigor * 1.5 + self.base_willpower * 0.5
-        self.max_stamina = 100 + self.base_vigor * 0.75 + self.base_dexterity * 1 + self.base_willpower * 0.25
-        self.max_ki = 100 + self.base_vigor * 0.5 + self.base_willpower * 1.5
+        # Top Left: Health, Stamina, Ki Bars
+        self.health_label = tk.Label(master, text="Health:")
+        self.health_label.grid(row=0, column=0)
+        self.health_bar = tk.Label(master, bg="red", width=20)
+        self.health_bar.grid(row=0, column=1)
 
-        # Initial action state
-        self.icon_state = "Laying on stomach"
-        self.action_state = "Nothing"
+        self.stamina_label = tk.Label(master, text="Stamina:")
+        self.stamina_label.grid(row=1, column=0)
+        self.stamina_bar = tk.Label(master, bg="yellow", width=20)
+        self.stamina_bar.grid(row=1, column=1)
 
-    def rest(self):
-        # Unlock condition
-        if self.recovery_actions < 2 and self.base_vigor >= 2.0 and self.base_dexterity >= 2.0 and self.base_willpower >= 2.0:
-            self.recovery_actions = 2
-            print("Recovery Actions increased to 2.")
-            self.unlock_sleep()
-            self.unlock_crawl()
+        self.ki_label = tk.Label(master, text="Ki:")
+        self.ki_label.grid(row=2, column=0)
+        self.ki_bar = tk.Label(master, bg="blue", width=20)
+        self.ki_bar.grid(row=2, column=1)
 
-        # Perform rest action
-        print("You take a brief rest.")
-        time.sleep(1)  # Simulate action time
+        # Top Middle: Area, Action
+        self.area_label = tk.Label(master, text="Area: Foggy Beach")
+        self.area_label.grid(row=0, column=2, columnspan=2)
 
-        # Update costs and gains
-        self.current_health -= 1
-        self.current_stamina -= 1
-        self.current_ki -= 1
-        self.vigor_experience += 2
-        self.dexterity_experience += 2
-        self.willpower_experience += 2
+        self.action_label = tk.Label(master, text="Action: Nothing")
+        self.action_label.grid(row=1, column=2, columnspan=2)
 
-        # Check for level up
-        self.check_level_up()
+        # Top Right: Vigor, Dexterity, Willpower Bars
+        self.vigor_label = tk.Label(master, text="Vigor:")
+        self.vigor_label.grid(row=0, column=4)
+        self.vigor_var_label = tk.Label(master, text="0")
+        self.vigor_var_label.grid(row=0, column=5)
+        self.vigor_exp_label = tk.Label(master, text="Vigor Exp:")
+        self.vigor_exp_label.grid(row=1, column=4)
+        self.vigor_exp_bar = tk.Label(master, bg="red", width=20)
+        self.vigor_exp_bar.grid(row=1, column=5)
 
-    def unlock_sleep(self):
-        print("You unlock the action: Sleep.")
+        self.dexterity_label = tk.Label(master, text="Dexterity:")
+        self.dexterity_label.grid(row=2, column=4)
+        self.dexterity_var_label = tk.Label(master, text="0")
+        self.dexterity_var_label.grid(row=2, column=5)
+        self.dexterity_exp_label = tk.Label(master, text="Dexterity Exp:")
+        self.dexterity_exp_label.grid(row=3, column=4)
+        self.dexterity_exp_bar = tk.Label(master, bg="yellow", width=20)
+        self.dexterity_exp_bar.grid(row=3, column=5)
 
-    def unlock_crawl(self):
-        print("You unlock the action: Crawl.")
+        self.willpower_label = tk.Label(master, text="Willpower:")
+        self.willpower_label.grid(row=4, column=4)
+        self.willpower_var_label = tk.Label(master, text="0")
+        self.willpower_var_label.grid(row=4, column=5)
+        self.willpower_exp_label = tk.Label(master, text="Willpower Exp:")
+        self.willpower_exp_label.grid(row=5, column=4)
+        self.willpower_exp_bar = tk.Label(master, bg="blue", width=20)
+        self.willpower_exp_bar.grid(row=5, column=5)
 
-    def check_level_up(self):
-        # Check for level up in each attribute
-        if self.vigor_experience >= 100:
-            self.vigor_experience -= 100
-            self.base_vigor += 1
-            print("Your Vigor increased by 1.")
-        if self.dexterity_experience >= 100:
-            self.dexterity_experience -= 100
-            self.base_dexterity += 1
-            print("Your Dexterity increased by 1.")
-        if self.willpower_experience >= 100:
-            self.willpower_experience -= 100
-            self.base_willpower += 1
-            print("Your Willpower increased by 1.")
+        # Bottom Left: Action Buttons
+        self.action_button = tk.Button(master, text="Rest", command=self.rest_action)
+        self.action_button.grid(row=6, column=0)
 
-# Game initialization
-player = Player()
-print("You awaken on a beach that stretches out in both directions as far as you can see, which isn't a sizable distance since there is a heavy fog rising off the ocean. However, you can barely make out the shadowy silhouette of a figure down the beach.")
-print("You find that your memory is as hazy as the foggy beach, and you cannot recall how you wound up here. You realize you are badly wounded, physically exhausted, and your spirit is waning.")
-print("You feel like you'll recover with a good rest, and your intuition also tells you that you should make your way to that figure in the distance. In your current state, you can't even stand up, and aren't sure how you are going to get yourself there.")
-player.rest()  # Start with the default action of resting
+    def update_health_bar(self, current_health, max_health):
+        self.health_bar.config(text=f"{current_health}/{max_health}")
+
+    def update_stamina_bar(self, current_stamina, max_stamina):
+        self.stamina_bar.config(text=f"{current_stamina}/{max_stamina}")
+
+    def update_ki_bar(self, current_ki, max_ki):
+        self.ki_bar.config(text=f"{current_ki}/{max_ki}")
+
+    def update_vigor(self, current_vigor, vigor_exp):
+        self.vigor_var_label.config(text=current_vigor)
+        self.vigor_exp_bar.config(width=vigor_exp)
+
+    def update_dexterity(self, current_dexterity, dexterity_exp):
+        self.dexterity_var_label.config(text=current_dexterity)
+        self.dexterity_exp_bar.config(width=dexterity_exp)
+
+    def update_willpower(self, current_willpower, willpower_exp):
+        self.willpower_var_label.config(text=current_willpower)
+        self.willpower_exp_bar.config(width=willpower_exp)
+
+    def update_area(self, area):
+        self.area_label.config(text=f"Area: {area}")
+
+    def update_action(self, action_state):
+        self.action_label.config(text=f"Action: {action_state}")
+
+    def rest_action(self):
+        print("Rest action triggered.")  # Placeholder action
+
+
+root = tk.Tk()
+ui = GameUI(root)
+# Simulating data updates
+ui.update_health_bar(80, 100)
+ui.update_stamina_bar(50, 100)
+ui.update_ki_bar(30, 100)
+ui.update_vigor(5, 50)
+ui.update_dexterity(3, 20)
+ui.update_willpower(7, 80)
+root.mainloop()
