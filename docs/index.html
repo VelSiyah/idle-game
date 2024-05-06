@@ -1,111 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game UI</title>
-    <style>
-        /* Define styles for the UI elements */
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-        }
+import tkinter as tk
 
-        .bar {
-            width: 200px;
-            height: 20px;
-            border: 1px solid black;
-            margin-bottom: 5px;
-        }
+class GameUI:
+    def __init__(self, player):
+        self.player = player
+        self.root = tk.Tk()
+        self.resource_labels = {}
 
-        .button {
-            padding: 10px 20px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Top left: Health, Stamina, Ki Bars -->
-        <div>
-            <span>Health:</span>
-            <div class="bar" id="healthBar"></div>
-            <span>Stamina:</span>
-            <div class="bar" id="staminaBar"></div>
-            <span>Ki:</span>
-            <div class="bar" id="kiBar"></div>
-        </div>
+        for resource_name, resource in self.player.resources.items():
+            label = tk.Label(self.root, text=f"{resource_name}: {resource.amount}")
+            label.pack()
+            self.resource_labels[resource_name] = label
 
-        <!-- Top middle: Area, Action -->
-        <div>
-            <span id="areaLabel">Area: Foggy Beach</span><br>
-            <span id="actionLabel">Action: Nothing</span>
-        </div>
+        produce_button = tk.Button(self.root, text="Produce", command=self.produce)
+        produce_button.pack()
 
-        <!-- Top right: Vigor, Dexterity, Willpower Bars -->
-        <div>
-            <span>Vigor: <span id="vigorVar">0</span></span><br>
-            <div class="bar" style="background-color: red;" id="vigorExpBar"></div>
-            <span>Dexterity: <span id="dexterityVar">0</span></span><br>
-            <div class="bar" style="background-color: yellow;" id="dexterityExpBar"></div>
-            <span>Willpower: <span id="willpowerVar">0</span></span><br>
-            <div class="bar" style="background-color: blue;" id="willpowerExpBar"></div>
-        </div>
+    def produce(self):
+        self.player.produce()
+        for resource_name, resource in self.player.resources.items():
+            self.resource_labels[resource_name].config(text=f"{resource_name}: {resource.amount}")
 
-        <!-- Bottom left: Action Buttons -->
-        <button class="button" onclick="restAction()">Rest</button>
-    </div>
+        self.root.after(1000, self.produce)
 
-    <script>
-        // Function to update UI elements
-        function updateBars() {
-            // Health bar
-            var healthCurrentValue = 80;
-            var healthMaxValue = 100;
-            var healthBarWidth = (healthCurrentValue / healthMaxValue) * 100;
-            document.getElementById('healthBar').style.width = healthBarWidth + "%";
+# Example usage:
+player = Player()
+player.add_resource(Resource("Wood"))
+player.add_resource(Resource("Stone"))
+player.add_loop(Loop("Woodcutter", Resource("Wood"), [Resource("Stone", 5)]))
 
-            // Stamina bar
-            var staminaCurrentValue = 50;
-            var staminaMaxValue = 100;
-            var staminaBarWidth = (staminaCurrentValue / staminaMaxValue) * 100;
-            document.getElementById('staminaBar').style.width = staminaBarWidth + "%";
-
-            // Ki bar
-            var kiCurrentValue = 30;
-            var kiMaxValue = 100;
-            var kiBarWidth = (kiCurrentValue / kiMaxValue) * 100;
-            document.getElementById('kiBar').style.width = kiBarWidth + "%";
-
-            // Vigor bar
-            var vigorCurrentValue = 5;
-            var vigorExpValue = 50;
-            var vigorBarWidth = (vigorExpValue / 100) * 100;
-            document.getElementById('vigorExpBar').style.width = vigorBarWidth + "%";
-
-            // Dexterity bar
-            var dexterityCurrentValue = 3;
-            var dexterityExpValue = 20;
-            var dexterityBarWidth = (dexterityExpValue / 100) * 100;
-            document.getElementById('dexterityExpBar').style.width = dexterityBarWidth + "%";
-
-            // Willpower bar
-            var willpowerCurrentValue = 7;
-            var willpowerExpValue = 80;
-            var willpowerBarWidth = (willpowerExpValue / 100) * 100;
-            document.getElementById('willpowerExpBar').style.width = willpowerBarWidth + "%";
-        }
-
-        // Function to handle rest action
-        function restAction() {
-            console.log("Rest action triggered.");  // Placeholder action
-        }
-
-        // Call the updateBars function when the page loads
-        window.onload = updateBars;
-    </script>
-</body>
-</html>
+ui = GameUI(player)
+ui.root.mainloop()
