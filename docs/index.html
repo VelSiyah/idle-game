@@ -1,86 +1,111 @@
-import time
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game UI</title>
+    <style>
+        /* Define styles for the UI elements */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
 
-class Player:
-    def __init__(self):
-        # Base parameters
-        # self.current_race = "Human"  # Excluding current_race
-        self.base_vigor = 0
-        self.vigor_modifiers = 0
-        self.vigor_experience = 0
-        self.base_dexterity = 0
-        self.dexterity_modifiers = 0
-        self.dexterity_experience = 0
-        self.base_willpower = 0
-        self.willpower_modifiers = 0
-        self.willpower_experience = 0
-        self.current_health = 1
-        self.current_stamina = 0
-        self.current_ki = 0
-        self.distance_traveled = 0
-        self.current_area = "Foggy Beach"
-        self.recovery_actions = 1
-        self.traveling_actions = 0
-        self.exercise_actions = 0
-        self.physical_combat_actions = 0
-        self.energy_combat_actions = 0
-        self.magical_actions = 0
+        .bar {
+            width: 200px;
+            height: 20px;
+            border: 1px solid black;
+            margin-bottom: 5px;
+        }
 
-        # Calculate maximum parameters
-        self.max_health = 100 + self.base_vigor * 1.5 + self.base_willpower * 0.5
-        self.max_stamina = 100 + self.base_vigor * 0.75 + self.base_dexterity * 1 + self.base_willpower * 0.25
-        self.max_ki = 100 + self.base_vigor * 0.5 + self.base_willpower * 1.5
+        .button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Top left: Health, Stamina, Ki Bars -->
+        <div>
+            <span>Health:</span>
+            <div class="bar" id="healthBar"></div>
+            <span>Stamina:</span>
+            <div class="bar" id="staminaBar"></div>
+            <span>Ki:</span>
+            <div class="bar" id="kiBar"></div>
+        </div>
 
-        # Initial action state
-        self.icon_state = "Laying on stomach"
-        self.action_state = "Nothing"
+        <!-- Top middle: Area, Action -->
+        <div>
+            <span id="areaLabel">Area: Foggy Beach</span><br>
+            <span id="actionLabel">Action: Nothing</span>
+        </div>
 
-    def rest(self):
-        # Unlock condition
-        if self.recovery_actions < 2 and self.base_vigor >= 2.0 and self.base_dexterity >= 2.0 and self.base_willpower >= 2.0:
-            self.recovery_actions = 2
-            print("Recovery Actions increased to 2.")
-            self.unlock_sleep()
-            self.unlock_crawl()
+        <!-- Top right: Vigor, Dexterity, Willpower Bars -->
+        <div>
+            <span>Vigor: <span id="vigorVar">0</span></span><br>
+            <div class="bar" style="background-color: red;" id="vigorExpBar"></div>
+            <span>Dexterity: <span id="dexterityVar">0</span></span><br>
+            <div class="bar" style="background-color: yellow;" id="dexterityExpBar"></div>
+            <span>Willpower: <span id="willpowerVar">0</span></span><br>
+            <div class="bar" style="background-color: blue;" id="willpowerExpBar"></div>
+        </div>
 
-        # Perform rest action
-        print("You take a brief rest.")
-        time.sleep(1)  # Simulate action time
+        <!-- Bottom left: Action Buttons -->
+        <button class="button" onclick="restAction()">Rest</button>
+    </div>
 
-        # Update costs and gains
-        self.current_health -= 1
-        self.current_stamina -= 1
-        self.current_ki -= 1
-        self.vigor_experience += 2
-        self.dexterity_experience += 2
-        self.willpower_experience += 2
+    <script>
+        // Function to update UI elements
+        function updateBars() {
+            // Health bar
+            var healthCurrentValue = 80;
+            var healthMaxValue = 100;
+            var healthBarWidth = (healthCurrentValue / healthMaxValue) * 100;
+            document.getElementById('healthBar').style.width = healthBarWidth + "%";
 
-        # Check for level up
-        self.check_level_up()
+            // Stamina bar
+            var staminaCurrentValue = 50;
+            var staminaMaxValue = 100;
+            var staminaBarWidth = (staminaCurrentValue / staminaMaxValue) * 100;
+            document.getElementById('staminaBar').style.width = staminaBarWidth + "%";
 
-    def unlock_sleep(self):
-        print("You unlock the action: Sleep.")
+            // Ki bar
+            var kiCurrentValue = 30;
+            var kiMaxValue = 100;
+            var kiBarWidth = (kiCurrentValue / kiMaxValue) * 100;
+            document.getElementById('kiBar').style.width = kiBarWidth + "%";
 
-    def unlock_crawl(self):
-        print("You unlock the action: Crawl.")
+            // Vigor bar
+            var vigorCurrentValue = 5;
+            var vigorExpValue = 50;
+            var vigorBarWidth = (vigorExpValue / 100) * 100;
+            document.getElementById('vigorExpBar').style.width = vigorBarWidth + "%";
 
-    def check_level_up(self):
-        # Check for level up in each attribute
-        if self.vigor_experience >= 100:
-            self.vigor_experience -= 100
-            self.base_vigor += 1
-            print("Your Vigor increased by 1.")
-        if self.dexterity_experience >= 100:
-            self.dexterity_experience -= 100
-            self.base_dexterity += 1
-            print("Your Dexterity increased by 1.")
-        if self.willpower_experience >= 100:
-            self.willpower_experience -= 100
-            self.base_willpower += 1
-            print("Your Willpower increased by 1.")
+            // Dexterity bar
+            var dexterityCurrentValue = 3;
+            var dexterityExpValue = 20;
+            var dexterityBarWidth = (dexterityExpValue / 100) * 100;
+            document.getElementById('dexterityExpBar').style.width = dexterityBarWidth + "%";
 
-# Game initialization
-player = Player()
-print("You awaken on a beach that stretches out in both directions as far as you can see, which isn't a sizable distance since there is a heavy fog rising off the ocean. However, you can barely make out the shadowy silhouette of a figure down the beach.")
-print("You find that your memory is as hazy as the foggy beach, and you cannot recall how you wound up here. You realize you are badly wounded, physically exhausted, and your spirit is waning.")
-print("You feel like you'll recover with a good rest, and your intuition also tells you that you should make your way to that figure in the distance. In your current state, you can't even stand up, and aren't sure how you are going to get yourself there.")
-player.rest()  # Start with the default action of resting
+            // Willpower bar
+            var willpowerCurrentValue = 7;
+            var willpowerExpValue = 80;
+            var willpowerBarWidth = (willpowerExpValue / 100) * 100;
+            document.getElementById('willpowerExpBar').style.width = willpowerBarWidth + "%";
+        }
+
+        // Function to handle rest action
+        function restAction() {
+            console.log("Rest action triggered.");  // Placeholder action
+        }
+
+        // Call the updateBars function when the page loads
+        window.onload = updateBars;
+    </script>
+</body>
+</html>
