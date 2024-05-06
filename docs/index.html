@@ -1,55 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Idle Game</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Idle Game</h1>
-        <div id="stats">
-            <!-- Display Health -->
-            <div id="health">Health: </div>
-            <div id="currentHealth"></div>
-            <div>/</div>
-            <div id="maxHealth"></div>
-            <br>
-            <!-- Display Stamina -->
-            <div id="stamina">Stamina: </div>
-            <div id="currentStamina"></div>
-            <div>/</div>
-            <div id="maxStamina"></div>
-            <br>
-            <!-- Display Ki -->
-            <div id="ki">Ki: </div>
-            <div id="currentKi"></div>
-            <div>/</div>
-            <div id="maxKi"></div>
-            <br>
-            <!-- Display Distance -->
-            <div id="distance">Distance: </div>
-        </div>
-        <div id="actions">
-            <button id="restBtn">Rest</button>
-            <button id="crawlBtn">Crawl</button>
-            <button id="situpBtn">Sit-Up</button>
-        </div>
-        <div id="stats-right">
-            <!-- Display Vigor -->
-            <div id="vigor">Vigor: </div>
-            <progress id="vigorBar" max="75"></progress>
-            <br>
-            <!-- Display Dexterity -->
-            <div id="dexterity">Dexterity: </div>
-            <progress id="dexterityBar" max="100"></progress>
-            <br>
-            <!-- Display Willpower -->
-            <div id="willpower">Willpower: </div>
-            <progress id="willpowerBar" max="100"></progress>
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+import time
+
+class Player:
+    def __init__(self):
+        # Base parameters
+        self.current_race = "Human"
+        self.base_vigor = 0
+        self.vigor_modifiers = 0
+        self.vigor_experience = 0
+        self.base_dexterity = 0
+        self.dexterity_modifiers = 0
+        self.dexterity_experience = 0
+        self.base_willpower = 0
+        self.willpower_modifiers = 0
+        self.willpower_experience = 0
+        self.current_health = 1
+        self.current_stamina = 0
+        self.current_ki = 0
+        self.distance_traveled = 0
+        self.current_area = "Foggy Beach"
+        self.recovery_actions = 1
+        self.traveling_actions = 0
+        self.exercise_actions = 0
+        self.physical_combat_actions = 0
+        self.energy_combat_actions = 0
+        self.magical_actions = 0
+
+        # Calculate maximum parameters
+        self.max_health = 100 + self.base_vigor * 1.5 + self.base_willpower * 0.5
+        self.max_stamina = 100 + self.base_vigor * 0.75 + self.base_dexterity * 1 + self.base_willpower * 0.25
+        self.max_ki = 100 + self.base_vigor * 0.5 + self.base_willpower * 1.5
+
+        # Initial action state
+        self.icon_state = "Laying on stomach"
+        self.action_state = "Nothing"
+
+    def rest(self):
+        # Unlock condition
+        if self.recovery_actions < 2 and self.base_vigor >= 2.0 and self.base_dexterity >= 2.0 and self.base_willpower >= 2.0:
+            self.recovery_actions = 2
+            print("Recovery Actions increased to 2.")
+            self.unlock_sleep()
+            self.unlock_crawl()
+
+        # Perform rest action
+        print("You take a brief rest.")
+        time.sleep(1)  # Simulate action time
+
+        # Update costs and gains
+        self.current_health -= 1
+        self.current_stamina -= 1
+        self.current_ki -= 1
+        self.vigor_experience += 2
+        self.dexterity_experience += 2
+        self.willpower_experience += 2
+
+        # Check for level up
+        self.check_level_up()
+
+    def unlock_sleep(self):
+        print("You unlock the action: Sleep.")
+
+    def unlock_crawl(self):
+        print("You unlock the action: Crawl.")
+
+    def check_level_up(self):
+        # Check for level up in each attribute
+        if self.vigor_experience >= 100:
+            self.vigor_experience -= 100
+            self.base_vigor += 1
+            print("Your Vigor increased by 1.")
+        if self.dexterity_experience >= 100:
+            self.dexterity_experience -= 100
+            self.base_dexterity += 1
+            print("Your Dexterity increased by 1.")
+        if self.willpower_experience >= 100:
+            self.willpower_experience -= 100
+            self.base_willpower += 1
+            print("Your Willpower increased by 1.")
+
+# Game initialization
+player = Player()
+print("You awaken on a beach that stretches out in both directions as far as you can see, which isn't a sizable distance since there is a heavy fog rising off the ocean. However, you can barely make out the shadowy silhouette of a figure down the beach.")
+print("You find that your memory is as hazy as the foggy beach, and you cannot recall how you wound up here. You realize you are badly wounded, physically exhausted, and your spirit is waning.")
+print("You feel like you'll recover with a good rest, and your intuition also tells you that you should make your way to that figure in the distance. In your current state, you can't even stand up, and aren't sure how you are going to get yourself there.")
+player.rest()  # Start with the default action of resting
