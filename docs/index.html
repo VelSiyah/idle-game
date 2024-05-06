@@ -12,29 +12,42 @@
         <div id="stats">
             <!-- Display Health -->
             <div id="health">Health: </div>
+            <div id="currentHealth"></div>
+            <div>/</div>
             <div id="maxHealth"></div>
             <br>
             <!-- Display Stamina -->
             <div id="stamina">Stamina: </div>
+            <div id="currentStamina"></div>
+            <div>/</div>
             <div id="maxStamina"></div>
             <br>
             <!-- Display Ki -->
             <div id="ki">Ki: </div>
+            <div id="currentKi"></div>
+            <div>/</div>
             <div id="maxKi"></div>
             <br>
-            <!-- Display Distance, Vigor, Dexterity, Willpower, and progress bars -->
+            <!-- Display Distance -->
             <div id="distance">Distance: </div>
-            <div id="vigor">Vigor: </div>
-            <progress id="vigorBar" max="75"></progress>
-            <div id="dexterity">Dexterity: </div>
-            <progress id="dexterityBar" max="100"></progress>
-            <div id="willpower">Willpower: </div>
-            <progress id="willpowerBar" max="100"></progress>
         </div>
         <div id="actions">
             <button id="restBtn">Rest</button>
             <button id="crawlBtn">Crawl</button>
             <button id="situpBtn">Sit-Up</button>
+        </div>
+        <div id="stats-right">
+            <!-- Display Vigor -->
+            <div id="vigor">Vigor: </div>
+            <progress id="vigorBar" max="75"></progress>
+            <br>
+            <!-- Display Dexterity -->
+            <div id="dexterity">Dexterity: </div>
+            <progress id="dexterityBar" max="100"></progress>
+            <br>
+            <!-- Display Willpower -->
+            <div id="willpower">Willpower: </div>
+            <progress id="willpowerBar" max="100"></progress>
         </div>
     </div>
     <script src="script.js"></script>
