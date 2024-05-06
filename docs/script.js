@@ -1,40 +1,64 @@
-class Resource:
-    def __init__(self, name, initial_amount=0):
-        self.name = name
-        self.amount = initial_amount
+// Define the Resource class
+class Resource {
+    constructor(name, initialAmount = 0) {
+        this.name = name;
+        this.amount = initialAmount;
+    }
+}
 
-class Loop:
-    def __init__(self, name, output_resource, input_resources=None):
-        self.name = name
-        self.output_resource = output_resource
-        self.input_resources = input_resources if input_resources else []
+// Define the Loop class
+class Loop {
+    constructor(name, outputResource, inputResources = []) {
+        this.name = name;
+        this.outputResource = outputResource;
+        this.inputResources = inputResources;
+    }
+}
 
-class Player:
-    def __init__(self):
-        self.resources = {}
-        self.loops = []
+// Define the Player class
+class Player {
+    constructor() {
+        this.resources = {};
+        this.loops = [];
+    }
 
-    def add_resource(self, resource):
-        self.resources[resource.name] = resource
+    // Method to add a resource to the player's inventory
+    addResource(resource) {
+        this.resources[resource.name] = resource;
+    }
 
-    def add_loop(self, loop):
-        self.loops.append(loop)
+    // Method to add a loop to the player's inventory
+    addLoop(loop) {
+        this.loops.push(loop);
+    }
 
-    def produce(self):
-        for loop in self.loops:
-            input_met = True
-            for resource in loop.input_resources:
-                if self.resources.get(resource.name, 0) < resource.amount:
-                    input_met = False
-                    break
-            if input_met:
-                for resource in loop.input_resources:
-                    self.resources[resource.name] -= resource.amount
-                self.resources[loop.output_resource.name] += 1
+    // Method to produce resources based on the player's loops
+    produce() {
+        this.loops.forEach(loop => {
+            let inputMet = true;
+            loop.inputResources.forEach(input => {
+                if (this.resources[input.name].amount < input.amount) {
+                    inputMet = false;
+                }
+            });
 
-# Example usage:
-player = Player()
-player.add_resource(Resource("Wood"))
-player.add_resource(Resource("Stone"))
-player.add_loop(Loop("Woodcutter", Resource("Wood"), [Resource("Stone", 5)]))
-player.produce()
+            if (inputMet) {
+                loop.inputResources.forEach(input => {
+                    this.resources[input.name].amount -= input.amount;
+                });
+                this.resources[loop.outputResource.name].amount++;
+            }
+        });
+    }
+}
+
+// Example usage:
+const player = new Player();
+player.addResource(new Resource("Wood"));
+player.addResource(new Resource("Stone"));
+player.addLoop(new Loop("Woodcutter", new Resource("Wood"), [new Resource("Stone", 5)]));
+
+// Production loop (simulate producing resources every second)
+setInterval(() => {
+    player.produce();
+}, 1000);
