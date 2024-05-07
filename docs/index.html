@@ -1,31 +1,46 @@
-import time
-import threading
+import tkinter as tk
 
-class Game:
-    def __init__(self):
-        self.resource = 0
-        self.resource_per_second = 1
-        self.upgrade_cost = 10
-        self.upgrade_multiplier = 2
-        self.running = False
+class GameUI:
+    def __init__(self, master, game):
+        self.master = master
+        self.game = game
 
-    def start(self):
-        self.running = True
-        threading.Thread(target=self.generate_resources, daemon=True).start()
+        self.resource_label = tk.Label(master, text="Resources: 0")
+        self.resource_label.pack()
 
-    def stop(self):
-        self.running = False
+        self.upgrade_button = tk.Button(master, text="Upgrade", command=self.upgrade)
+        self.upgrade_button.pack()
+
+        self.start_button = tk.Button(master, text="Start", command=self.start)
+        self.start_button.pack()
+
+        self.stop_button = tk.Button(master, text="Stop", command=self.stop)
+        self.stop_button.pack()
+
+    def update_ui(self):
+        self.resource_label.config(text="Resources: {}".format(self.game.resource))
 
     def upgrade(self):
-        if self.resource >= self.upgrade_cost:
-            self.resource -= self.upgrade_cost
-            self.upgrade_cost *= self.upgrade_multiplier
-            self.resource_per_second *= self.upgrade_multiplier
+        self.game.upgrade()
+        self.update_ui()
 
-    def generate_resources(self):
-        while self.running:
-            self.resource += self.resource_per_second
-            time.sleep(1)
+    def start(self):
+        self.game.start()
 
-# Creating an instance of the game
-game = Game()
+    def stop(self):
+        self.game.stop()
+
+# Creating the Tkinter application
+root = tk.Tk()
+root.title("Idle Loops")
+
+# Creating an instance of the game UI
+game_ui = GameUI(root, game)
+
+def update():
+    game_ui.update_ui()
+    root.after(1000, update)
+
+update()  # Start the UI update loop
+
+root.mainloop()
