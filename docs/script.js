@@ -1,31 +1,38 @@
-import time
-import threading
+class Game {
+    constructor() {
+        this.resource = 0;
+        this.resourcePerSecond = 1;
+        this.upgradeCost = 10;
+        this.upgradeMultiplier = 2;
+        this.running = false;
+    }
 
-class Game:
-    def __init__(self):
-        self.resource = 0
-        self.resource_per_second = 1
-        self.upgrade_cost = 10
-        self.upgrade_multiplier = 2
-        self.running = False
+    start() {
+        this.running = true;
+        this.generateResources();
+    }
 
-    def start(self):
-        self.running = True
-        threading.Thread(target=self.generate_resources, daemon=True).start()
+    stop() {
+        this.running = false;
+    }
 
-    def stop(self):
-        self.running = False
+    upgrade() {
+        if (this.resource >= this.upgradeCost) {
+            this.resource -= this.upgradeCost;
+            this.upgradeCost *= this.upgradeMultiplier;
+            this.resourcePerSecond *= this.upgradeMultiplier;
+            document.getElementById("upgradeCost").textContent = `Upgrade Cost: ${this.upgradeCost}`;
+        }
+    }
 
-    def upgrade(self):
-        if self.resource >= self.upgrade_cost:
-            self.resource -= self.upgrade_cost
-            self.upgrade_cost *= self.upgrade_multiplier
-            self.resource_per_second *= self.upgrade_multiplier
+    generateResources() {
+        setInterval(() => {
+            if (this.running) {
+                this.resource += this.resourcePerSecond;
+                document.getElementById("resource").textContent = `Resources: ${this.resource}`;
+            }
+        }, 1000);
+    }
+}
 
-    def generate_resources(self):
-        while self.running:
-            self.resource += self.resource_per_second
-            time.sleep(1)
-
-# Creating an instance of the game
-game = Game()
+const game = new Game();
