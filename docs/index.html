@@ -1,38 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Idle Game</title>
-</head>
-<body>
-    <div id="resources"></div>
-    <button id="produceBtn">Produce</button>
+import time
+import threading
 
-    <script src="script.js"></script>
-    <script>
-        // UI code
-        const resourcesDiv = document.getElementById("resources");
-        const produceBtn = document.getElementById("produceBtn");
+class Game:
+    def __init__(self):
+        self.resource = 0
+        self.resource_per_second = 1
+        self.upgrade_cost = 10
+        self.upgrade_multiplier = 2
+        self.running = False
 
-        // Function to update resource display
-        function updateResources() {
-            resourcesDiv.innerHTML = "";
-            Object.values(player.resources).forEach(resource => {
-                const resourceDiv = document.createElement("div");
-                resourceDiv.innerText = `${resource.name}: ${resource.amount}`;
-                resourcesDiv.appendChild(resourceDiv);
-            });
-        }
+    def start(self):
+        self.running = True
+        threading.Thread(target=self.generate_resources, daemon=True).start()
 
-        // Event listener for the produce button
-        produceBtn.addEventListener("click", () => {
-            player.produce();
-            updateResources();
-        });
+    def stop(self):
+        self.running = False
 
-        // Update resources display initially
-        updateResources();
-    </script>
-</body>
-</html>
+    def upgrade(self):
+        if self.resource >= self.upgrade_cost:
+            self.resource -= self.upgrade_cost
+            self.upgrade_cost *= self.upgrade_multiplier
+            self.resource_per_second *= self.upgrade_multiplier
+
+    def generate_resources(self):
+        while self.running:
+            self.resource += self.resource_per_second
+            time.sleep(1)
+
+# Creating an instance of the game
+game = Game()
