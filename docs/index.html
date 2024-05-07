@@ -7,11 +7,14 @@
 </head>
 <body>
     <h1>Idle Loops</h1>
-    <p id="resource">Resources: 0</p>
+    <p id="resources">Resources: 0</p>
+    <p id="resourcePerSecond">Resource per second: 1</p>
     <p id="upgradeCost">Upgrade Cost: 10</p>
     <button onclick="game.upgrade()">Upgrade</button>
     <button onclick="game.start()">Start</button>
     <button onclick="game.stop()">Stop</button>
+    <button onclick="game.addAction(gatherWood)">Gather Wood</button>
+    <button onclick="game.addAction(mineStone)">Mine Stone</button>
     <script src="script.js"></script>
 </body>
 </html>
