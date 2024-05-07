@@ -1,64 +1,31 @@
-// Define the Resource class
-class Resource {
-    constructor(name, initialAmount = 0) {
-        this.name = name;
-        this.amount = initialAmount;
-    }
-}
+import time
+import threading
 
-// Define the Loop class
-class Loop {
-    constructor(name, outputResource, inputResources = []) {
-        this.name = name;
-        this.outputResource = outputResource;
-        this.inputResources = inputResources;
-    }
-}
+class Game:
+    def __init__(self):
+        self.resource = 0
+        self.resource_per_second = 1
+        self.upgrade_cost = 10
+        self.upgrade_multiplier = 2
+        self.running = False
 
-// Define the Player class
-class Player {
-    constructor() {
-        this.resources = {};
-        this.loops = [];
-    }
+    def start(self):
+        self.running = True
+        threading.Thread(target=self.generate_resources, daemon=True).start()
 
-    // Method to add a resource to the player's inventory
-    addResource(resource) {
-        this.resources[resource.name] = resource;
-    }
+    def stop(self):
+        self.running = False
 
-    // Method to add a loop to the player's inventory
-    addLoop(loop) {
-        this.loops.push(loop);
-    }
+    def upgrade(self):
+        if self.resource >= self.upgrade_cost:
+            self.resource -= self.upgrade_cost
+            self.upgrade_cost *= self.upgrade_multiplier
+            self.resource_per_second *= self.upgrade_multiplier
 
-    // Method to produce resources based on the player's loops
-    produce() {
-        this.loops.forEach(loop => {
-            let inputMet = true;
-            loop.inputResources.forEach(input => {
-                if (this.resources[input.name].amount < input.amount) {
-                    inputMet = false;
-                }
-            });
+    def generate_resources(self):
+        while self.running:
+            self.resource += self.resource_per_second
+            time.sleep(1)
 
-            if (inputMet) {
-                loop.inputResources.forEach(input => {
-                    this.resources[input.name].amount -= input.amount;
-                });
-                this.resources[loop.outputResource.name].amount++;
-            }
-        });
-    }
-}
-
-// Example usage:
-const player = new Player();
-player.addResource(new Resource("Wood"));
-player.addResource(new Resource("Stone"));
-player.addLoop(new Loop("Woodcutter", new Resource("Wood"), [new Resource("Stone", 5)]));
-
-// Production loop (simulate producing resources every second)
-setInterval(() => {
-    player.produce();
-}, 1000);
+# Creating an instance of the game
+game = Game()
