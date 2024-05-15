@@ -1,76 +1,34 @@
-class Action {
-    constructor(name, cost, effect) {
-        this.name = name;
-        this.cost = cost;
-        this.effect = effect;
-    }
+let age = 0;
+let resources = 0;
+
+function updateStats() {
+    document.getElementById('age').innerText = age;
+    document.getElementById('resources').innerText = resources;
 }
 
-class Game {
-    constructor() {
-        this.resources = 0;
-        this.resourcePerSecond = 1;
-        this.upgradeCost = 10;
-        this.upgradeMultiplier = 2;
-        this.running = false;
-        this.actionQueue = [];
-    }
-
-    start() {
-        this.running = true;
-        this.generateResources();
-    }
-
-    stop() {
-        this.running = false;
-    }
-
-    upgrade() {
-        if (this.resources >= this.upgradeCost) {
-            this.resources -= this.upgradeCost;
-            this.upgradeCost *= this.upgradeMultiplier;
-            this.resourcePerSecond += 1;
-            document.getElementById("upgradeCost").textContent = `Upgrade Cost: ${this.upgradeCost}`;
-            document.getElementById("resourcePerSecond").textContent = `Resource per second: ${this.resourcePerSecond}`;
-            document.getElementById("resources").textContent = `Resources: ${this.resources}`;
-        }
-    }
-
-    addAction(action) {
-        if (this.resources >= action.cost) {
-            this.resources -= action.cost;
-            this.actionQueue.push(action);
-            this.executeActionQueue();
-        }
-    }
-
-    executeActionQueue() {
-        if (this.actionQueue.length > 0) {
-            const action = this.actionQueue.shift();
-            action.effect();
-            this.executeActionQueue();
-        }
-    }
-
-    generateResources() {
-        setInterval(() => {
-            if (this.running) {
-                this.resources += this.resourcePerSecond;
-                document.getElementById("resources").textContent = `Resources: ${this.resources}`;
-            }
-        }, 1000);
-    }
+function logMessage(message) {
+    const log = document.getElementById('log');
+    const p = document.createElement('p');
+    p.innerText = message;
+    log.appendChild(p);
+    log.scrollTop = log.scrollHeight;
 }
 
-const game = new Game();
+function meditate() {
+    resources += 1;
+    logMessage(`Meditated and gained 1 resource. Total resources: ${resources}`);
+    updateStats();
+}
 
-// Define actions
-const gatherWood = new Action("Gather Wood", 5, () => {
-    game.resources += 10;
-    document.getElementById("resources").textContent = `Resources: ${game.resources}`;
-});
+function ageCharacter() {
+    age += 1;
+    resources += age;  // Example mechanic: gain resources based on age
+    logMessage(`Aged 1 year. Age: ${age}, Total resources: ${resources}`);
+    updateStats();
+}
 
-const mineStone = new Action("Mine Stone", 10, () => {
-    game.resources += 20;
-    document.getElementById("resources").textContent = `Resources: ${game.resources}`;
-});
+document.getElementById('meditateButton').addEventListener('click', meditate);
+
+setInterval(ageCharacter, 10000); // Age the character every 10 seconds
+
+updateStats();
