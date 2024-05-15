@@ -1,34 +1,35 @@
-let age = 20; // Starting age
-let resources = 0;
-
-function updateStats() {
-    document.getElementById('age').innerText = age;
-    document.getElementById('resources').innerText = resources;
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
 }
 
-function logMessage(message) {
-    const log = document.getElementById('log');
-    const p = document.createElement('p');
-    p.innerText = message;
-    log.appendChild(p);
-    log.scrollTop = log.scrollHeight;
+#game {
+    width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
-function meditate() {
-    resources += 1;
-    logMessage(`Meditated and gained 1 resource. Total resources: ${resources}`);
-    updateStats();
+#stats {
+    margin-bottom: 20px;
 }
 
-function ageCharacter() {
-    age += 1;
-    resources += age;  // Gain resources based on age
-    logMessage(`Aged 1 year. Age: ${age}, Total resources: ${resources}`);
-    updateStats();
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 5px;
 }
 
-document.getElementById('meditateButton').addEventListener('click', meditate);
-
-setInterval(ageCharacter, 10000); // Age the character every 10 seconds
-
-updateStats();
+#log {
+    margin-top: 20px;
+    height: 100px;
+    overflow-y: auto;
+    background-color: #e0e0e0;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: left;
+}
