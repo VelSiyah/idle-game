@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Idle Loops</title>
+    <title>Immortality Idle Game</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Idle Loops</h1>
-    <p id="resources">Resources: 0</p>
-    <p id="resourcePerSecond">Resource per second: 1</p>
-    <p id="upgradeCost">Upgrade Cost: 10</p>
-    <button onclick="game.upgrade()">Upgrade</button>
-    <button onclick="game.start()">Start</button>
-    <button onclick="game.stop()">Stop</button>
-    <button onclick="game.addAction(gatherWood)">Gather Wood</button>
-    <button onclick="game.addAction(mineStone)">Mine Stone</button>
+    <div id="game">
+        <h1>Immortality Idle</h1>
+        <div id="stats">
+            <p>Age: <span id="age">0</span></p>
+            <p>Resources: <span id="resources">0</span></p>
+        </div>
+        <button id="meditateButton">Meditate</button>
+        <div id="log"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
